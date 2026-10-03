@@ -1,0 +1,18 @@
+package com.example.auditoria.adapter.in.web.dto;
+
+import com.example.auditoria.domain.valueobject.Severidad;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+
+import java.time.LocalDate;
+
+public record RegistrarHallazgoRequest(
+        @NotBlank(message = "El titulo es obligatorio") String titulo,
+        String descripcion,
+        @NotBlank(message = "El area responsable es obligatoria") String areaResponsable,
+        @NotNull(message = "La severidad es obligatoria (CRITICA, ALTA, MEDIA o BAJA)") Severidad severidad,
+        @NotNull(message = "La fecha de deteccion es obligatoria")
+        @PastOrPresent(message = "La fecha de deteccion no puede ser futura") LocalDate fechaDeteccion
+) {
+}
