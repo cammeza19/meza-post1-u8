@@ -2,30 +2,6 @@
 
 **Clean Architecture y análisis costo-beneficio de CQRS/Event Sourcing**
 
-| | |
-|---|---|
-| **Autora** | Camila Meza Palacio |
-| **Asignatura** | Patrones de Diseño de Software — Unidad 8 |
-| **Repositorio** | `meza-post1-u8` (ambas partes, un solo proyecto Spring Boot) |
-| **Stack** | Java 17 · Spring Boot 3.5.6 · Spring Data JPA (Hibernate 6.6) · H2 · Maven |
-
----
-
-## Tabla de contenido
-
-1. [Descripción](#descripción)
-2. [Estructura del proyecto](#estructura-del-proyecto)
-3. [Parte 1 — Clean Architecture](#parte-1--clean-architecture-hallazgos-de-auditoría)
-4. [Parte 2 — Análisis costo-beneficio de CQRS/Event Sourcing](#parte-2--análisis-costo-beneficio-de-cqrsevent-sourcing)
-5. [Decisiones de diseño](#decisiones-de-diseño)
-6. [Cómo ejecutar](#cómo-ejecutar)
-7. [Endpoints](#endpoints)
-8. [Pruebas automatizadas](#pruebas-automatizadas)
-9. [Capturas de los endpoints](#capturas-de-los-endpoints)
-10. [Herramientas utilizadas](#herramientas-utilizadas)
-11. [Conclusiones](#conclusiones)
-
----
 
 ## Descripción
 
@@ -84,41 +60,6 @@ meza-post1-u8/
         └── adapter/in/web/HallazgoControllerIntegrationTest.java
 ```
 
-### Regla de dependencia
-
-Las dependencias del código apuntan solo hacia adentro. `domain/` no conoce a nadie, `usecase/` solo conoce `domain/`, y Spring y JPA viven únicamente en `adapter/` y `config/`.
-
-```mermaid
-flowchart LR
-    subgraph FD["Frameworks & Drivers"]
-        SB["Spring Boot · Spring MVC · JPA/Hibernate · H2<br/>config/AuditoriaConfiguration"]
-    end
-    subgraph IA["Interface Adapters"]
-        WEB["adapter/in/web<br/>HallazgoController + DTOs"]
-        PER["adapter/out/persistence<br/>RepositoryAdapter + JpaEntity"]
-    end
-    subgraph UC["Use Cases"]
-        SVC["usecase/impl<br/>Servicios"]
-        PORT["usecase/port<br/>HallazgoRepositoryPort<br/>HistorialAuditoriaPort"]
-    end
-    subgraph EN["Entities"]
-        DOM["domain<br/>HallazgoAuditoria · EstadoHallazgo<br/>PlanRemediacion · HallazgoId · Severidad"]
-    end
-    SB --> WEB & PER
-    WEB --> SVC
-    PER -. implementa .-> PORT
-    SVC --> PORT
-    SVC --> DOM
-    PORT --> DOM
-```
-
-Verificación (checkpoint de la guía):
-
-```bash
-# No debe imprimir nada: domain/ y usecase/ no importan Spring ni JPA
-grep -rn "import org.springframework\|import jakarta.persistence" \
-     src/main/java/com/example/auditoria/domain src/main/java/com/example/auditoria/usecase
-```
 
 ---
 
