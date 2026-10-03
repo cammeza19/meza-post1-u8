@@ -4,12 +4,14 @@ import com.example.auditoria.usecase.CerrarHallazgoUseCase;
 import com.example.auditoria.usecase.ConsultarHallazgoUseCase;
 import com.example.auditoria.usecase.ConsultarHistorialUseCase;
 import com.example.auditoria.usecase.IniciarRemediacionUseCase;
+import com.example.auditoria.usecase.ObtenerDashboardAuditoriaUseCase;
 import com.example.auditoria.usecase.ReabrirHallazgoUseCase;
 import com.example.auditoria.usecase.RegistrarHallazgoUseCase;
 import com.example.auditoria.usecase.impl.CerrarHallazgoService;
 import com.example.auditoria.usecase.impl.ConsultarHallazgoService;
 import com.example.auditoria.usecase.impl.ConsultarHistorialService;
 import com.example.auditoria.usecase.impl.IniciarRemediacionService;
+import com.example.auditoria.usecase.impl.ObtenerDashboardAuditoriaService;
 import com.example.auditoria.usecase.impl.ReabrirHallazgoService;
 import com.example.auditoria.usecase.impl.RegistrarHallazgoService;
 import com.example.auditoria.usecase.port.HallazgoRepositoryPort;
@@ -59,6 +61,12 @@ public class AuditoriaConfiguration {
     @Bean
     public ConsultarHallazgoUseCase consultarHallazgoUseCase(HallazgoRepositoryPort repo) {
         return transaccional.envolverSoloLectura(ConsultarHallazgoUseCase.class, new ConsultarHallazgoService(repo));
+    }
+
+    @Bean
+    public ObtenerDashboardAuditoriaUseCase obtenerDashboardAuditoriaUseCase(HallazgoRepositoryPort repo) {
+        return transaccional.envolverSoloLectura(ObtenerDashboardAuditoriaUseCase.class,
+                new ObtenerDashboardAuditoriaService(repo));
     }
 
     @Bean
