@@ -74,20 +74,6 @@ El proyecto organiza los **cuatro círculos concéntricos**:
 | **Interface Adapters** | `adapter/` | `HallazgoController` traduce HTTP ↔ casos de uso usando DTOs propios. `HallazgoRepositoryAdapter` traduce, campo a campo, entre `HallazgoJpaEntity` y el agregado de dominio. |
 | **Frameworks & Drivers** | `config/` + Spring Boot | `AuditoriaConfiguration` ensambla explícitamente los casos de uso (son clases Java puras, sin `@Service`) y los envuelve en transacciones. Spring MVC, Hibernate y H2 son detalles reemplazables. |
 
-### Máquina de estados
-
-```mermaid
-stateDiagram-v2
-    [*] --> ABIERTO : registrar
-    ABIERTO --> EN_REMEDIACION : iniciarRemediacion(plan)
-    EN_REMEDIACION --> CERRADO : cerrar()
-    CERRADO --> REABIERTO : reabrir()
-    REABIERTO --> EN_REMEDIACION : iniciarRemediacion(plan)
-```
-
-Cualquier otra transición lanza `TransicionInvalidaException`, o `IllegalStateException` si se intenta cerrar un hallazgo sin plan. `GlobalExceptionHandler` traduce ambas a **HTTP 400**. Así no se puede cerrar un hallazgo que nunca estuvo en remediación ni reabrir uno que sigue abierto.
-
----
 
 ## Parte 2 — Análisis costo-beneficio de CQRS/Event Sourcing
 
